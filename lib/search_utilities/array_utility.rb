@@ -1,5 +1,5 @@
 module SearchUtilities
-  class ArrayUtilility
+  class ArrayUtility    
     def self.create_array_from_params(id, params)
       arrayed = []
 
