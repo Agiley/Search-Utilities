@@ -11,8 +11,8 @@ module SearchUtilities
     
     def get_request_values(key)
       values = []
-      param_values = ArrayUtility.create_array_from_params(key.to_sym, params)
-      cookie_values = ArrayUtility.create_array_from_cookies("#{current_controller_key}_#{key}".to_sym, cookies)
+      param_values = ::SearchUtilities::ArrayUtility.create_array_from_params(key.to_sym, params)
+      cookie_values = ::SearchUtilities::ArrayUtility.create_array_from_cookies("#{current_controller_key}_#{key}".to_sym, cookies)
       values = param_values | cookie_values
       
       return values
