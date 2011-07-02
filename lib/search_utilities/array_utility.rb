@@ -2,10 +2,15 @@ module SearchUtilities
   class ArrayUtility    
     def self.create_array_from_params(id, params)
       arrayed = []
+      values = params[id]
 
-      if (params[id])
-        params[id].each do |param|
-          arrayed << param
+      if (values)
+        if (values.is_a?(Array))
+          values.each do |param|
+            arrayed << param
+          end
+        else
+          arrayed << values
         end
       end
 
