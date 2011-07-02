@@ -1,8 +1,8 @@
 module SearchUtilities
-   require 'lib/search_utilities/railtie' if defined?(Rails)
-   require 'lib/search_utilities/array_utility'
-   require 'lib/search_utilities/controller_utility'
-   require 'lib/search_utilities/cookies'
-   require 'lib/search_utilities/search'
-   require 'lib/search_utilities/search_helper'
+   require File.expand_path("search_utilities/railtie", __FILE__) if defined?(Rails)
+   require File.expand_path("search_utilities/array_utility", __FILE__)
+   require File.expand_path("search_utilities/controller_utility", __FILE__)
+   require File.expand_path("search_utilities/cookies", __FILE__)
+   require File.expand_path("search_utilities/search", __FILE__)
+   require File.expand_path("search_utilities/search_helper", __FILE__)
 end
