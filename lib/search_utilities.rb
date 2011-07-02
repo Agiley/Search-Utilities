@@ -1,8 +1,8 @@
 module SearchUtilities
-   require File.expand_path("../search_utilities/railtie", __FILE__) if defined?(Rails)
-   require File.expand_path("../search_utilities/array_utility", __FILE__)
-   require File.expand_path("../search_utilities/controller_utility", __FILE__)
-   require File.expand_path("../search_utilities/cookies", __FILE__)
-   require File.expand_path("../search_utilities/search", __FILE__)
-   require File.expand_path("../search_utilities/search_helper", __FILE__)
+  require File.join(File.dirname(__FILE__), 'search_utilities/railtie') if defined?(Rails)
+  require File.join(File.dirname(__FILE__), 'search_utilities/array_utility')
+  require File.join(File.dirname(__FILE__), 'search_utilities/controller_utility')
+  require File.join(File.dirname(__FILE__), 'search_utilities/cookies')
+  require File.join(File.dirname(__FILE__), 'search_utilities/search')
+  require File.join(File.dirname(__FILE__), 'search_utilities/search_helper')
 end
