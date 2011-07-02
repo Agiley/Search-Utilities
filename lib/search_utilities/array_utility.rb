@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 module SearchUtilities
   class ArrayUtility    
     def self.create_array_from_params(id, params)
