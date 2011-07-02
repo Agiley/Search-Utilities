@@ -1,0 +1,3 @@
+module SearchUtilities
+  # Your code goes here...
+end
