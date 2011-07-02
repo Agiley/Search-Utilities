@@ -1,5 +1,5 @@
-module ActionView
-  module Helpers
+module SearchUtilities
+  module SearchHelper
     include ::SearchUtilities::RequestUtility
 
     def render_multi_checkbox_list(title, collection, id_field, name_field, parenthize_column = nil, identifier = nil)
