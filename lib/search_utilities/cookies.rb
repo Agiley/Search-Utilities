@@ -1,6 +1,5 @@
 module SearchUtilities
   module Cookies
-    include ControllerUtility
     
     def format_key(key)
       return "#{current_controller_key}_#{key}"

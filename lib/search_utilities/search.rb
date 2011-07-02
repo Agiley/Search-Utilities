@@ -1,19 +1,7 @@
 module SearchUtilities
   module Search
-    include ControllerUtility
-    
-    def get_request_value(key)
-      return get_request_values(key).try(:first)
-    end
-    
-    def get_request_values(key)
-      values = []
-      param_values = ArrayUtility.create_array_from_params(key.to_sym, params)
-      cookie_values = ArrayUtility.create_array_from_cookies("#{current_controller_key}_#{key}".to_sym, cookies)
-      values = param_values | cookie_values
-      
-      return values
-    end
+    include ::SearchUtilities::RequestUtility
+    include ::SearchUtilities::Cookies
     
     def set_search_options(options = {})
       search_options = {}
