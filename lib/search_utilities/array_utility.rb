@@ -8,10 +8,12 @@ module SearchUtilities
       if (values)
         if (values.is_a?(Array))
           values.each do |param|
-            arrayed << param
+            param = param.force_encoding("utf-8") if (param && param.is_a?(String))
+            arrayed << param if (param)
           end
         else
-          arrayed << values
+          param = (values.is_a?(String)) ? values.force_encoding("utf-8") : values
+          arrayed << param if (param)
         end
       end
 
@@ -19,8 +21,7 @@ module SearchUtilities
     end
 
     def self.create_array_from_cookies(id, cookies)
-      values = cookies[id].to_s.split(',')
-      return values
+      return cookies[id].to_s.force_encoding("utf-8").split(',') rescue []
     end
   end 
 end
