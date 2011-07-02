@@ -1,11 +1,13 @@
 module SearchUtilities
   module Cookies
-    def current_cookie_controller
-      return "#{controller_name.gsub("_controller", "")}_#{action_name}"
+    include ControllerUtility
+    
+    def format_key(key)
+      return "#{current_controller_key}_#{key}"
     end
     
     def get_cookie(key)
-      return cookies["#{current_cookie_controller}_#{key}".to_sym]
+      return cookies[format_key(key).to_sym]
     end
     
     def set_cookie!(key, value)
@@ -14,17 +16,17 @@ module SearchUtilities
     
     def set_cookies!(values)
       values.each do |key, value|
-        cookies["#{current_cookie_controller}_#{key}".to_sym] = value
+        cookies[format_key(key).to_sym] = value
       end
     end
     
     def has_cookie?(key)
-      return cookies.has_key?("#{current_cookie_controller}_#{key}".to_sym)
+      return cookies.has_key?(format_key(key).to_sym)
     end
     
     def clear_cookies!(keys)
       keys.each do |key|
-        cookies.delete "#{current_cookie_controller}_#{key.to_s}"
+        cookies.delete format_key(key)
       end
     end
   end  

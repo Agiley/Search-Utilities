@@ -60,8 +60,5 @@ module SearchUtilities
       end
     end
 
-    def render_label(id, text, clazz = "")
-      return label_tag(id, text, {:class => clazz}) 
-    end
   end  
 end
