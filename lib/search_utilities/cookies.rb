@@ -26,8 +26,13 @@ module SearchUtilities
     
     def clear_cookies!(keys)
       keys.each do |key|
-        cookies.delete format_key(key)
+        clear_cookie!(key)
       end
     end
+    
+    def clear_cookie!(key)
+      cookies.delete(format_key(key))
+    end
+    
   end  
 end
