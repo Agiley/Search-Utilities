@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 module SearchUtilities
   module SearchHelper
-    include ::SearchUtilities::RequestUtility
+    include ::SearchUtilities::Request
 
     def render_text_field(id, default_value = nil, options = {})
       value = get_request_value(id) || nil

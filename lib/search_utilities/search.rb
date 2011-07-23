@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 module SearchUtilities
   module Search
-    include ::SearchUtilities::RequestUtility
+    include ::SearchUtilities::Request
     include ::SearchUtilities::Cookies
     
     def set_search_options(options = {})
@@ -17,7 +17,7 @@ module SearchUtilities
     
     def set_query(request_key)
       query = get_request_value(request_key)
-      set_cookie!(request_key, query)
+      set_cookie!(request_key, query) if (query)
       
       return query
     end
