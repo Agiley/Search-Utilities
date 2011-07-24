@@ -10,13 +10,13 @@ module SearchUtilities
       return cookies[format_key(key).to_sym]
     end
     
-    def set_cookie!(key, value)
+    def set_cookie!(key, value, expires = 7.days.from_now)
       set_cookies!({key.to_sym => value})
     end
     
-    def set_cookies!(values)
+    def set_cookies!(values, expires = 7.days.from_now)
       values.each do |key, value|
-        cookies[format_key(key).to_sym] = value
+        cookies[format_key(key).to_sym] = {:value => value, :expires => expires}
       end
     end
     
@@ -31,7 +31,9 @@ module SearchUtilities
     end
     
     def clear_cookie!(key)
-      cookies.delete(format_key(key))
+      #Somehow cookies.delete doesn't really work - we need to reset the cookie instead.
+      #cookies.delete(format_key(key))
+      cookies[format_key(key)] = {:value => nil, :expires => Time.at(0)}
     end
     
   end  
