@@ -29,6 +29,7 @@ module SearchUtilities
         label_column        =   options.delete(:label_column) { |opt| :label }
         parenthize_column   =   options.delete(:parenthize_column)
         include_blank       =   options.delete(:include_blank)
+        blank_label         =   options.delete(:blank_label) { |opt| "" } 
 
         stored_values = get_request_values(id)
         stored_values = stored_values.collect {|v| v.to_s }
@@ -39,7 +40,7 @@ module SearchUtilities
           values = values.collect {|v| [(parenthize_column) ? "#{v.send(label_column)} (#{v.send(parenthize_column)})" : v.send(label_column), v.send(value_column).to_s] }
         end
 
-        values.insert(0, ["", ""]) if (include_blank)
+        values.insert(0, [blank_label, ""]) if (include_blank)
 
         return select_tag(id, options_for_select(values, :selected => stored_values), options)
       end
