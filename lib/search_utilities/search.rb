@@ -63,10 +63,10 @@ module SearchUtilities
       return search_options
     end
     
-    def set_date(search_options, request_key, option_key, fallback_value = nil)
+    def set_date(search_options, request_key, option_key, fallback_value = nil, date_parsing_format = "%Y-%m-%d")
       date_val = get_request_value(request_key)
       
-      date = Date.strptime(date_val, "%Y-%m-%d") rescue nil if (date_val && date_val.present?)
+      date = Date.strptime(date_val, date_parsing_format) rescue nil if (date_val && date_val.present?)
       
       if (!date && fallback_value && !params[:is_search])
         date = fallback_value
@@ -80,12 +80,12 @@ module SearchUtilities
       return search_options, date
     end
     
-    def set_date_interval(search_options, from_key, to_key, option_key, from_date_fallback, type = :with, fallback_to = nil)
+    def set_date_interval(search_options, from_key, to_key, option_key, from_date_fallback, type = :with, fallback_to = nil, date_parsing_format = "%Y-%m-%d")
       from_request_val = get_request_value(from_key)
       to_request_val = get_request_value(to_key)
       
-      from_date = Date.strptime(from_request_val.to_s, "%Y-%m-%d") rescue nil
-      to_date = Date.strptime(to_request_val.to_s, "%Y-%m-%d") rescue nil
+      from_date = Date.strptime(from_request_val.to_s, date_parsing_format) rescue nil
+      to_date = Date.strptime(to_request_val.to_s, date_parsing_format) rescue nil
       
       if (from_date && to_date)
         set_cookie!(from_key, from_date.to_s(:db))
@@ -142,6 +142,31 @@ module SearchUtilities
       return search_options
     end
     
+    def set_integer_minimum_range(search_options, key, option_key, maximum_value, type = :with)
+      request_val = get_request_value(key)
+      value = (request_val.present?) ? request_val.to_i : nil
+      
+      if (value && maximum_value)
+        set_cookie!(key, value)
+        search_options[type][option_key] = value..maximum_value
+      end
+            
+      return search_options
+    end
+    
+    def set_integer_maximum_range(search_options, key, option_key, minimum_value = nil, type = :with)
+      request_val = get_request_value(key)
+      value = (request_val.present?) ? request_val.to_i : nil
+      minimum_value = (minimum_value) ? minimum_value : 0
+      
+      if (value && !minimum_value)
+        set_cookie!(key, value)
+        search_options[type][option_key] = minimum_value..value
+      end
+            
+      return search_options
+    end
+    
     def set_with_option(search_options, request_key, option_key)
       request_value = get_request_value(request_key)
       
@@ -154,5 +179,4 @@ module SearchUtilities
     end
     
   end
-  
 end
