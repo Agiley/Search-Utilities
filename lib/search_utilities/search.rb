@@ -142,29 +142,55 @@ module SearchUtilities
       return search_options
     end
     
-    def set_integer_minimum_range(search_options, key, option_key, maximum_value, type = :with)
-      request_val = get_request_value(key)
-      value = (request_val.present?) ? request_val.to_i : nil
-      
-      if (value && maximum_value)
-        set_cookie!(key, value)
-        search_options[type][option_key] = value..maximum_value
+    def set_minimum_range(search_options, data_type, key, option_key, maximum_value, type = :with)
+      value = parse_value(key, data_type)
+
+      if (value)
+        maximum_value = case data_type
+          when :integer, :int             then maximum_value.to_i rescue nil
+          when :float, :decimal, :double  then maximum_value.to_f rescue nil
+        end
+        
+        if (maximum_value)
+          set_cookie!(key, value)
+          search_options[type][option_key] = value..maximum_value
+        end
       end
             
       return search_options
     end
     
-    def set_integer_maximum_range(search_options, key, option_key, minimum_value = nil, type = :with)
-      request_val = get_request_value(key)
-      value = (request_val.present?) ? request_val.to_i : nil
-      minimum_value = (minimum_value) ? minimum_value : 0
+    def set_maximum_range(search_options, data_type, key, option_key, minimum_value = nil, type = :with)
+      value = parse_value(key, data_type)
       
-      if (value && !minimum_value)
-        set_cookie!(key, value)
-        search_options[type][option_key] = minimum_value..value
+      if (value)
+        minimum_value = (minimum_value) ? minimum_value : 0
+        minimum_value = case data_type
+          when :integer, :int             then minimum_value.to_i rescue nil
+          when :float, :decimal, :double  then minimum_value.to_f rescue nil
+        end
+        
+        if (minimum_value)
+          set_cookie!(key, value)
+          search_options[type][option_key] = minimum_value..value
+        end
       end
             
       return search_options
+    end
+    
+    def parse_value(key, data_type = :integer)
+      value = nil
+      request_val = get_request_value(key)
+      
+      if (request_val.present?)
+        value = case data_type
+          when :integer, :int             then request_val.to_i rescue nil
+          when :float, :decimal, :double  then request_val.gsub(",", ".").to_f rescue nil
+        end
+      end
+      
+      return value
     end
     
     def set_with_option(search_options, request_key, option_key)
