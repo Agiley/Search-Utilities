@@ -4,9 +4,17 @@ module SearchUtilities
     include ::SearchUtilities::Request
 
     def render_text_field(id, default_value = nil, options = {})
+      return render_field(:text_field, id, default_value, options)
+    end
+    
+    def render_hidden_field(id, default_value = nil, options = {})
+      return render_field(:hidden_field, id, default_value, options)
+    end
+    
+    def render_field(field_type, id, default_value = nil, options = {})
       value = get_request_value(id) || nil
       value = default_value if (default_value && (value.nil? || value.blank?))
-      return text_field_tag(id, value, options)
+      return send("#{field_type}_tag", id, value, options)
     end
 
     def render_checkbox(id, value, options = {})
