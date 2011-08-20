@@ -47,7 +47,8 @@ module SearchUtilities
     end
 
     def create_array_from_cookies(id)
-      return cookies[id].to_s.force_encoding("utf-8").split(',') rescue []
+      cookie_string = cookies[id].to_s.force_encoding("utf-8")
+      return cookie_string.include?(",") ? cookie_string.split(',') : [cookie_string]
     end
     
   end  
