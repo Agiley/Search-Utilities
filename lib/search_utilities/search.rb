@@ -22,13 +22,18 @@ module SearchUtilities
       return query
     end
     
-    def set_order(search_options, default_order, request_key)
-      search_options[:order] = default_order
+    def set_order(search_options, request_key, default_order = nil)
       sort_order_request_value = get_request_value(request_key)
       
-      if (sort_order_request_value)
+      if (sort_order_request_value && sort_order_request_value.present?)
         set_cookie!(request_key, sort_order_request_value)
         search_options[:order] = sort_order_request_value
+      elsif ((sort_order_request_value.nil? || sort_order_request_value.blank?) && default_order && default_order.present?)
+        set_cookie!(request_key, default_order)
+        search_options[:order] = default_order
+      else
+        set_cookie!(request_key, "@relevance desc")
+        search_options[:order] = "@relevance desc"
       end
       
       return search_options
