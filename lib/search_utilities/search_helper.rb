@@ -18,15 +18,16 @@ module SearchUtilities
     end
 
     def render_checkbox(id, value, options = {})
-      checked = false
+      checked = options.delete(:checked) { |e| false }
       multiple = options.delete(:multiple) { |e| false }
       key = (multiple && options[:name]) ? options[:name].gsub("[", "").gsub("]", "") : id
+      
       existing_values = get_request_values(key) || nil
       
       existing_values.each do |existing_value|
         checked = existing_value.to_s.downcase.eql?(value.to_s.downcase)
         break if (checked)
-      end
+      end if (existing_values && existing_values.any?)
       
       return check_box_tag(id, value, checked, options)
     end
