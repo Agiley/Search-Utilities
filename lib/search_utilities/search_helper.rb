@@ -25,8 +25,11 @@ module SearchUtilities
       existing_values = get_request_values(key) || nil
       
       existing_values.each do |existing_value|
-        checked = existing_value.to_s.downcase.eql?(value.to_s.downcase)
-        break if (checked)
+        is_checked = (existing_value && existing_value.present? && existing_value.to_s.downcase.eql?(value.to_s.downcase))
+        if (is_checked)
+          checked = is_checked
+          break
+        end
       end if (existing_values && existing_values.any?)
       
       return check_box_tag(id, value, checked, options)
