@@ -11,7 +11,7 @@ module SearchUtilities
     end
     
     def set_cookie!(key, value, expires = 7.days.from_now)
-      set_cookies!({key.to_sym => value})
+      set_cookies!({key.to_sym => value}, expires)
     end
     
     def set_cookies!(values, expires = 7.days.from_now)
