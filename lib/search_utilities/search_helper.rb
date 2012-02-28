@@ -18,11 +18,13 @@ module SearchUtilities
     end
 
     def render_checkbox(id, value, options = {})
-      checked = options.delete(:checked) { |e| false }
-      multiple = options.delete(:multiple) { |e| false }
-      key = (multiple && options[:name]) ? options[:name].gsub("[", "").gsub("]", "") : id
+      checked         =   options.fetch(:checked, false)
+      multiple        =   options.fetch(:multiple, false)
+      name            =   options.fetch(:name, nil)
+      name            =   name.to_s if (name)
+      key             =   (multiple && name && name != "") ? name.gsub("[", "").gsub("]", "") : id
       
-      existing_values = get_request_values(key) || nil
+      existing_values =   get_request_values(key) || nil
       
       existing_values.each do |existing_value|
         is_checked = (existing_value && existing_value.present? && existing_value.to_s.downcase.eql?(value.to_s.downcase))
