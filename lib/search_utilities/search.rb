@@ -198,14 +198,20 @@ module SearchUtilities
       return value
     end
     
-    def set_with_option(search_options, request_key, option_key, convert_method = :to_s)
-      request_value   =   get_request_value(request_key)
+    def set_with_option_from_request(search_options, request_key, search_option_key, convert_method = :to_s)
+      request_value       =   get_request_value(request_key)
       
-      if (request_value && request_value.present?)
-        value         =   convert_value(request_value, convert_method)
-        set_cookie!(request_key, value)
-        search_options[:with][option_key] = value
+      if (request_value && request_value.to_s.present?)
+        value             =   convert_value(request_value, convert_method)
+        search_options    =   set_with_option(search_options, request_key, search_option_key, value)
       end
+      
+      return search_options
+    end
+    
+    def set_with_option(search_options, cookie_key, search_option_key, value)
+      set_cookie!(cookie_key, value)
+      search_options[:with][search_option_key] = value
       
       return search_options
     end
