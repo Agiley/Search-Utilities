@@ -198,7 +198,7 @@ module SearchUtilities
       return value
     end
     
-    def set_with_option_from_request(search_options, request_key, search_option_key, convert_method = :to_s)
+    def set_with_option_from_request(search_options, request_key, search_option_key, convert_method = nil)
       request_value       =   get_request_value(request_key)
       
       if (request_value && request_value.to_s.present?)
@@ -216,8 +216,8 @@ module SearchUtilities
       return search_options
     end
     
-    def convert_value(value, convert_method = :to_s)
-      return value.respond_to?(convert_method) ? value.send(convert_method) : value
+    def convert_value(value, convert_method = nil)
+      return (convert_method && value.respond_to?(convert_method)) ? value.send(convert_method) : value
     end
     
   end
