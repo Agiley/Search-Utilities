@@ -12,24 +12,25 @@ module SearchUtilities
     end
     
     def render_field(field_type, id, default_value = nil, options = {})
-      value = get_request_value(id) || nil
-      value = default_value if (default_value && (value.nil? || value.blank?))
+      value                 =   get_request_value(id) || nil
+      value                 =   default_value if (default_value && (value.nil? || value.blank?))
+      
       return send("#{field_type}_tag", id, value, options)
     end
 
     def render_checkbox(id, value, options = {})
-      checked         =   options.fetch(:checked, false)
-      multiple        =   options.fetch(:multiple, false)
-      name            =   options.fetch(:name, nil)
-      name            =   name.to_s if (name)
-      key             =   (multiple && name && name != "") ? name.gsub("[", "").gsub("]", "") : id
+      checked               =   options.fetch(:checked, false)
+      multiple              =   options.fetch(:multiple, false)
+      name                  =   options.fetch(:name, nil)
+      name                  =   name.to_s if (name)
+      key                   =   (multiple && name && name != "") ? name.gsub("[", "").gsub("]", "") : id
       
-      existing_values =   get_request_values(key) || nil
+      existing_values       =   get_request_values(key) || nil
       
       existing_values.each do |existing_value|
-        is_checked = (existing_value && existing_value.present? && existing_value.to_s.downcase.eql?(value.to_s.downcase))
+        is_checked          =   (existing_value && existing_value.present? && existing_value.to_s.downcase.eql?(value.to_s.downcase))
         if (is_checked)
-          checked = is_checked
+          checked           =   is_checked
           break
         end
       end if (existing_values && existing_values.any?)
@@ -45,15 +46,10 @@ module SearchUtilities
         include_blank       =   options.delete(:include_blank)
         blank_label         =   options.delete(:blank_label) { |opt| "" } 
 
-        stored_values = get_request_values(id)
-        stored_values = stored_values.collect {|v| v.to_s }
-
-        if (values.is_a?(Array))
-          values = values.collect {|v| [(parenthize_column) ? "#{v[label_column]} (#{v[parenthize_column]})" : v[label_column], v[value_column].to_s] }
-        else
-          values = values.collect {|v| [(parenthize_column) ? "#{v.send(label_column)} (#{v.send(parenthize_column)})" : v.send(label_column), v.send(value_column).to_s] }
-        end
-
+        stored_values       =   get_request_values(id)
+        stored_values       =   stored_values.collect {|v| v.to_s }
+        
+        values              =   values.collect { |v| v.is_a?(Hash) ? [v[label_column], v[value_column].to_s] : [v.send(label_column), v.send(value_column).to_s] }
         values.insert(0, [blank_label, ""]) if (include_blank)
 
         return select_tag(id, options_for_select(values, :selected => stored_values), options)
