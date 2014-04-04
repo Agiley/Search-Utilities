@@ -52,7 +52,31 @@ module SearchUtilities
         values              =   values.collect { |v| v.is_a?(Hash) ? [v[label_column], v[value_column].to_s] : [v.send(label_column), v.send(value_column).to_s] }
         values.insert(0, [blank_label, ""]) if (include_blank)
 
-        return select_tag(id, options_for_select(values, :selected => stored_values), options)
+        return select_tag(id, options_for_select(values, selected: stored_values), options)
+      end
+    end
+    
+    def render_grouped_dropdown(id, grouped_values, options = {})        
+      if (grouped_values && !grouped_values.empty?)
+        value_column        =   options.delete(:value_column) { |opt| :value } 
+        label_column        =   options.delete(:label_column) { |opt| :label }
+        parenthize_column   =   options.delete(:parenthize_column)
+        include_blank       =   options.delete(:include_blank)
+        blank_label         =   options.delete(:blank_label) { |opt| "" } 
+
+        stored_values       =   get_request_values(id)
+        stored_values       =   stored_values.collect {|v| v.to_s }
+        
+        filtered_values     =   {}
+        
+        grouped_values.each do |group_label, group|
+          group             =   group.collect { |v| v.is_a?(Hash) ? [v[label_column], v[value_column].to_s] : [v.send(label_column), v.send(value_column).to_s] }
+          group.insert(0, [blank_label, ""]) if (include_blank)
+          
+          filtered_values[group_label] = group
+        end
+
+        return select_tag(id, grouped_options_for_select(filtered_values, selected: stored_values), options)
       end
     end
 
