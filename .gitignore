@@ -3,5 +3,6 @@
 Gemfile.lock
 pkg/*
 .rvmrc
-Gemfile.lock
+.ruby-version
+.ruby-gemset
 .DS_STORE
